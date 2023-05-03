@@ -1,0 +1,16 @@
+# JetBrains IDE
+.idea/
+
+# Visual Studio Code
+.vscode/
+
+# Compiled Python bytecode
+*.py[cod]
+
+# big directories
+logs/
+datasets/
+DUMMY1
+
+# Python virtual environment
+venv/
