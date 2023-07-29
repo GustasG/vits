@@ -43,8 +43,8 @@ class DiscriminatorP(nn.Module):
             t = t + n_pad
         x = x.view(b, c, t // self.period, self.period)
 
-        for l in self.convs:
-            x = l(x)
+        for conv in self.convs:
+            x = conv(x)
             x = F.leaky_relu(x, LRELU_SLOPE)
             fmap.append(x)
 
@@ -77,8 +77,8 @@ class DiscriminatorS(nn.Module):
     def forward(self, x):
         fmap = []
 
-        for l in self.convs:
-            x = l(x)
+        for conv in self.convs:
+            x = conv(x)
             x = F.leaky_relu(x, LRELU_SLOPE)
             fmap.append(x)
 

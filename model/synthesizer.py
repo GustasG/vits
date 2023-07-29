@@ -1,16 +1,16 @@
 import math
 from typing import List
 
+import monotonic_align
 import torch
 from torch import nn
-import monotonic_align
 
-from model.commons import rand_slice_segments, sequence_mask, generate_path
-from model.encoders import TextEncoder, PosteriorEncoder
+from model.commons import generate_path, rand_slice_segments, sequence_mask
+from model.encoders import PosteriorEncoder, TextEncoder
 from model.models import Generator, ResidualCouplingBlock
-from model.predictors import StochasticDurationPredictor, DurationPredictor
-from text.symbols import get_vocabulary
+from model.predictors import DurationPredictor, StochasticDurationPredictor
 from params import Params
+from text.symbols import get_vocabulary
 
 
 class SynthesizerTrn(nn.Module):

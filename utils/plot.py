@@ -4,7 +4,6 @@ import matplotlib
 import matplotlib.pylab as plt
 import numpy as np
 
-
 mpl_logger = logging.getLogger('matplotlib')
 mpl_logger.setLevel(logging.WARNING)
 

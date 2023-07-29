@@ -1,17 +1,16 @@
 import os
 import random
 from pathlib import Path
-from typing import List, Tuple, Iterator
+from typing import Iterator, List, Tuple
 
 import torch
+import torchaudio
 from torch.utils.data import Dataset
 
-import torchaudio
-
-from model.commons import intersperse
 from audio.processing import spectrogram_from_waveform
-from text.convert import text_to_sequence
+from model.commons import intersperse
 from params import DataParams
+from text.convert import text_to_sequence
 
 
 class SingleSpeakerDataset(Dataset):
@@ -86,7 +85,7 @@ class SingleSpeakerDataset(Dataset):
 
         if rate != self.sampling_rate:
             raise ValueError(f'{rate} SR doesn\'t match target {self.sampling_rate} SR')
-        
+
         if spec_file.exists():
             spec = torch.load(spec_file)
         else:

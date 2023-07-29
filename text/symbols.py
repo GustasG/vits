@@ -1,5 +1,5 @@
 from functools import cache
-from typing import Tuple, Mapping, List
+from typing import List, Mapping, Tuple
 
 
 @cache

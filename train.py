@@ -5,27 +5,28 @@ from pathlib import Path
 from typing import Tuple
 
 import torch
+import torch.distributed as dist
+import torch.multiprocessing as mp
+from torch.cuda.amp import GradScaler, autocast
 from torch.nn import functional as F
+from torch.nn.parallel import DistributedDataParallel
 from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
-import torch.multiprocessing as mp
-import torch.distributed as dist
-from torch.nn.parallel import DistributedDataParallel
-from torch.cuda.amp import autocast, GradScaler
 
-from audio.processing import melscale_spectrogram_from_waveform, melscale_bank_from_spectrogram
+import utils.logging
+from audio.processing import (melscale_bank_from_spectrogram,
+                              melscale_spectrogram_from_waveform)
 from data.collate import single_speaker_collate
 from data.dataset import SingleSpeakerDataset
 from data.samplers import DistributedBucketSampler
 from model import commons
 from model.discriminators import MultiPeriodDiscriminator
-from model.losses import generator_loss, discriminator_loss, feature_loss, kl_loss
+from model.losses import (discriminator_loss, feature_loss, generator_loss,
+                          kl_loss)
 from model.synthesizer import SynthesizerTrn
-from utils.checkpoint import load_checkpoint, latest_checkpoint_path
-import utils.logging
-from utils.plot import plot_spectrogram_to_numpy, plot_alignment_to_numpy
 from params import Params
-
+from utils.checkpoint import latest_checkpoint_path, load_checkpoint
+from utils.plot import plot_alignment_to_numpy, plot_spectrogram_to_numpy
 
 torch.backends.cudnn.benchmark = True
 global_step = 0
@@ -318,7 +319,7 @@ def train_and_evaluate(rank: int, epoch: int, params: Params, model_dir: Path,
                     iteration=epoch,
                     checkpoint_path=model_dir / f'G_{global_step}.pth'
                 )
-    
+
                 utils.checkpoint.save_checkpoint(
                     model=net_d,
                     optimizer=optim_d,

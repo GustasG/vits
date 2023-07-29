@@ -7,7 +7,7 @@ class DistributedBucketSampler(DistributedSampler):
     Maintain similar input lengths in a batch.
     Length groups are specified by boundaries.
     Ex) boundaries = [b1, b2, b3] -> any batch is included either {x | b1 < length(x) <=b2} or {x | b2 < length(x) <= b3}.
-  
+
     It removes samples which are not included in the boundaries.
     Ex) boundaries = [b1, b2, b3] -> any x s.t. length(x) <= b1 or length(x) > b3 are discarded.
     """

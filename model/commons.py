@@ -15,9 +15,11 @@ def get_padding(kernel_size, dilation=1):
 
 
 def convert_pad_shape(pad_shape):
-    l = pad_shape[::-1]
-    pad_shape = [item for sublist in l for item in sublist]
-    return pad_shape
+    return [
+        item
+        for sublist in pad_shape[::-1]
+        for item in sublist
+    ]
 
 
 def intersperse(lst: List[int], item: int) -> List[int]:
@@ -74,9 +76,9 @@ def sequence_mask(length, max_length=None):
 
 def generate_path(duration, mask):
     """
-  duration: [b, 1, t_x]
-  mask: [b, 1, t_y, t_x]
-  """
+    duration: [b, 1, t_x]
+    mask: [b, 1, t_y, t_x]
+    """
     b, _, t_y, t_x = mask.shape
     cum_duration = torch.cumsum(duration, -1)
 

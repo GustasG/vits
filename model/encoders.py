@@ -3,8 +3,8 @@ import math
 import torch
 from torch import nn
 
-from model.commons import sequence_mask
 from model.attentions import Encoder
+from model.commons import sequence_mask
 from model.modules import WN
 
 

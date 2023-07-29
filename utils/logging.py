@@ -1,8 +1,7 @@
 import logging
 import os
-from pathlib import Path
 import sys
-
+from pathlib import Path
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 logger = logging

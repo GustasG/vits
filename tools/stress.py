@@ -1,6 +1,6 @@
-from multiprocessing.pool import ThreadPool
 import json
-from typing import List, Iterator
+from multiprocessing.pool import ThreadPool
+from typing import Iterator, List
 
 import requests
 

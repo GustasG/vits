@@ -4,7 +4,8 @@ import torch
 from torch import nn
 from torch.nn import functional as F
 
-from model.modules import ElementwiseAffine, Log, ConvFlow, Flip, DDSConv, LayerNorm
+from model.modules import (ConvFlow, DDSConv, ElementwiseAffine, Flip,
+                           LayerNorm, Log)
 
 
 class StochasticDurationPredictor(nn.Module):

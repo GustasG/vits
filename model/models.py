@@ -3,10 +3,11 @@ from typing import List
 import torch
 from torch import nn
 from torch.nn import functional as F
-from torch.nn.utils import weight_norm, remove_weight_norm
+from torch.nn.utils import remove_weight_norm, weight_norm
 
 from model.commons import init_weights
-from model.modules import ResidualCouplingLayer, Flip, ResBlock1, ResBlock2, LRELU_SLOPE
+from model.modules import (LRELU_SLOPE, Flip, ResBlock1, ResBlock2,
+                           ResidualCouplingLayer)
 
 
 class ResidualCouplingBlock(nn.Module):

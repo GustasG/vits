@@ -1,11 +1,11 @@
 import math
-from typing import Union, List
+from typing import List, Union
 
 import torch
 from torch import nn
 from torch.nn import functional as F
 
-from model.commons import subsequent_mask, convert_pad_shape
+from model.commons import convert_pad_shape, subsequent_mask
 from model.modules import LayerNorm
 
 
@@ -275,32 +275,34 @@ class MultiHeadAttention(nn.Module):
     @staticmethod
     def _matmul_with_relative_values(x, y):
         """
-    x: [b, h, l, m]
-    waveform: [h or 1, m, d]
-    ret: [b, h, l, d]
-    """
+        x: [b, h, l, m]
+        waveform: [h or 1, m, d]
+        ret: [b, h, l, d]
+        """
         ret = torch.matmul(x, y.unsqueeze(0))
         return ret
 
     @staticmethod
     def _matmul_with_relative_keys(x, y):
         """
-    x: [b, h, l, d]
-    waveform: [h or 1, m, d]
-    ret: [b, h, l, m]
-    """
+        x: [b, h, l, d]
+        waveform: [h or 1, m, d]
+        ret: [b, h, l, m]
+        """
         ret = torch.matmul(x, y.unsqueeze(0).transpose(-2, -1))
         return ret
 
     def _get_relative_embeddings(self, relative_embeddings, length):
-        max_relative_position = 2 * self.window_size + 1
         # Pad first before slice to avoid using cond ops.
         pad_length = max(length - (self.window_size + 1), 0)
         slice_start_position = max((self.window_size + 1) - length, 0)
         slice_end_position = slice_start_position + 2 * length - 1
 
         if pad_length > 0:
-            padded_relative_embeddings = F.pad(relative_embeddings, convert_pad_shape([[0, 0], [pad_length, pad_length], [0, 0]]))
+            padded_relative_embeddings = F.pad(
+                input=relative_embeddings,
+                pad=convert_pad_shape([[0, 0], [pad_length, pad_length], [0, 0]])
+            )
         else:
             padded_relative_embeddings = relative_embeddings
 
@@ -310,9 +312,9 @@ class MultiHeadAttention(nn.Module):
     @staticmethod
     def _relative_position_to_absolute_position(x):
         """
-    x: [b, h, l, 2*l-1]
-    ret: [b, h, l, l]
-    """
+        x: [b, h, l, 2*l-1]
+        ret: [b, h, l, l]
+        """
         batch, heads, length, _ = x.size()
         # Concat columns of pad to shift from relative to absolute indexing.
         x = F.pad(x, convert_pad_shape([[0, 0], [0, 0], [0, 0], [0, 1]]))
@@ -328,9 +330,9 @@ class MultiHeadAttention(nn.Module):
     @staticmethod
     def _absolute_position_to_relative_position(x):
         """
-    x: [b, h, l, l]
-    ret: [b, h, l, 2*l-1]
-    """
+        x: [b, h, l, l]
+        ret: [b, h, l, 2*l-1]
+        """
         batch, heads, length, _ = x.size()
         # padd along column
         x = F.pad(x, convert_pad_shape([[0, 0], [0, 0], [0, 0], [0, length - 1]]))
@@ -343,18 +345,18 @@ class MultiHeadAttention(nn.Module):
     @staticmethod
     def _attention_bias_proximal(length):
         """Bias for self-attention to encourage attention to close positions.
-    Args:
-      length: an integer scalar.
-    Returns:
-      a Tensor with shape [1, 1, length, length]
-    """
+        Args:
+        length: an integer scalar.
+        Returns:
+        a Tensor with shape [1, 1, length, length]
+        """
         r = torch.arange(length, dtype=torch.float32)
         diff = torch.unsqueeze(r, 0) - torch.unsqueeze(r, 1)
         return torch.unsqueeze(torch.unsqueeze(-torch.log1p(torch.abs(diff)), 0), 0)
 
 
 class FFN(nn.Module):
-    def __init__(self, 
+    def __init__(self,
                  *,
                  in_channels: int,
                  out_channels: int,

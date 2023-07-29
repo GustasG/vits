@@ -9,7 +9,7 @@ This project uses [conda](https://conda.io) for virtual environment and package 
 ### Creating conda environment
 
 1. ```conda env create -f environment.yml```
-2. ```conda activate vits-lithuanian```
+2. ```conda activate vits```
 
 ## Training
 

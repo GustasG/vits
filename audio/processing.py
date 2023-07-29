@@ -1,9 +1,8 @@
 from functools import cache
 
+import librosa
 import torch
 import torchaudio
-
-import librosa
 
 
 def dynamic_range_compression_torch(x: torch.Tensor, c: int = 1, clip_val: float = 1e-5) -> torch.Tensor:

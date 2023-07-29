@@ -1,6 +1,6 @@
 import logging
 from pathlib import Path
-from typing import Tuple, Mapping, Any
+from typing import Any, Mapping, Tuple
 
 import torch
 from torch import nn
