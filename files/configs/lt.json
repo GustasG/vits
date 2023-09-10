@@ -15,8 +15,8 @@
     "c_kl": 1.0
   },
   "data": {
-    "training_files":"files/filelists/lt_text_train_stressed.txt",
-    "validation_files":"files/filelists/lt_text_val_stressed.txt",
+    "training_files":"files/filelists/lt/lt_text_train_stressed.txt",
+    "validation_files":"files/filelists/lt/lt_text_val_stressed.txt",
     "text_cleaners":["basic_cleaners"],
     "sampling_rate": 16000,
     "filter_length": 1024,
