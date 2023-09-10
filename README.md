@@ -1,4 +1,4 @@
-# vits-lithuanian
+# vits
 
 VITS TTS model fitted for lithuanian language.
 
